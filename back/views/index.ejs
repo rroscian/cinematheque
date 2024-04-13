@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+</head>
+<body>
+    <h1>Liste des films</h1>
+    <table>
+        <% films.forEach(film => { %>
+        <tr>
+            <th>Titre</th><th>Titre original</th><th>Réalisateurs</th><th>Année de production</th><th>Nationalité</th><th>Durée</th><th>Genre</th><th>Synopsis</th>
+            <td>
+              <%= film.titre %>
+            </td>
+            <td>
+              <%= film.titreOriginal %>
+            </td>   
+            <td>
+              <%= film.realisateurs %>
+            </td>   
+            <td>
+              <%= film.annee %>
+            </td> 
+            <td>
+              <%= film.nationalite %>
+            </td> 
+            <td>
+              <%= film.duree %>
+            </td> 
+            <td>
+              <%= film.genre %>
+            </td>     
+            <td>
+              <%= film.synopsis %>
+            </td>
+          </tr>
+        <% }); %>
+    </table>
+</body>
+</html>
