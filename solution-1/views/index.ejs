@@ -7,10 +7,9 @@
 </head>
 <body>
     <h1>Liste des films</h1>
-    <table>
+    <table><th>Titre</th><th>Titre original</th><th>Réalisateurs</th><th>Année de production</th><th>Nationalité</th><th>Durée</th><th>Genre</th><th>Synopsis</th>
         <% films.forEach(film => { %>
         <tr>
-            <th>Titre</th><th>Titre original</th><th>Réalisateurs</th><th>Année de production</th><th>Nationalité</th><th>Durée</th><th>Genre</th><th>Synopsis</th>
             <td>
               <%= film.titre %>
             </td>

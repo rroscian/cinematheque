@@ -1,8 +1,7 @@
 const xlsx = require('xlsx');
 const fs = require('fs');
-const getFilmModel = require('../models/film.model.js');
+const Film = require('../models/film.model.js');
 const { Int32 } = require('mongodb');
-
 
 /**
  * Cette fonction récupère le fichier Excel sous forme de worksheet et le renvoie un JSON
@@ -77,7 +76,6 @@ const saveFilms = async () => {
 
     // Sauvegarde si BDD vide, sinon mise à jour
     const totalFilms = await nbFilms();
-    const Film = await getFilmModel();
 
     // Suppression des films obsolètes
     const allExcelIds = formatFilms.map((film) => film.id);
@@ -113,7 +111,7 @@ const saveFilms = async () => {
  * Récupère les changements dans le fichier Excel et sauvegarde les fichiers si changements il y a.
  * @return {null} - Ne retourne rien
  */
-const watchChanges = () => {
+const recupChanges = () => {
   fs.watch("./xlsx/film.xlsx", { persistent: true }, (eventType) => {
     // eventType: "rename" | "change" |
     if (eventType === "change") saveFilms();
@@ -128,7 +126,6 @@ const watchChanges = () => {
  */
 const nbFilms = async () => {
   try {
-    const Film = await getFilmModel();
     return Film.countDocuments();
   } catch (err) {
     throw err;
@@ -158,4 +155,4 @@ const prepareRequeteBulk = (formatFilms) => {
   return dataset;
 };
 
-module.exports = { saveFilms, watchChanges };
+module.exports = { saveFilms, recupChanges };

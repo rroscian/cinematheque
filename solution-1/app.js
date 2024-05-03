@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Film = require('./models/film.model.js');
 
-const { saveFilms, watchChanges } = require('./controllers/film.controller.js');
+const { saveFilms, recupChanges } = require('./controllers/film.controller.js');
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -20,8 +20,7 @@ mongoose
 
 app.get("/", async(req, res) => {
     try {
-        console.log(Film.filmSchema)
-        films = await Film.filmSchema.find();
+        films = await Film.find();
         res.render("index", { films: films});
     }
     catch(err) {
@@ -30,10 +29,10 @@ app.get("/", async(req, res) => {
     }
 })
 
-app.listen(3000, () => {
-    console.log('Serveur démarré sur http://localhost:3000');
+app.listen(3001, () => {
+    console.log('Serveur démarré sur http://localhost:3001');
     // Sauvegarde Films BDD
     saveFilms();
     // Réimport si actualisation
-    watchChanges();
+    recupChanges();
 })
