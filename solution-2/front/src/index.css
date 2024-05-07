@@ -1,3 +1,7 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -46,6 +50,15 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
+table {
+  border-collapse: collapse;
+}
+
+td, th {
+  border: 1px solid white;
+}
+
 button:hover {
   border-color: #646cff;
 }

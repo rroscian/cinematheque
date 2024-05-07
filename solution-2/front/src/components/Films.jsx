@@ -5,8 +5,8 @@ import axios from "axios";
 import { URL } from "../../constants/api";
 import { Link } from 'react-router-dom';
 import Header from './Header';
-const Films = () => {
 
+const Films = () => {
     const dispatch = useDispatch();
     const films = useSelector((state) => state.film.data);
     localStorage.setItem('listefilms', JSON.stringify(films));
@@ -24,21 +24,46 @@ const Films = () => {
             console.log(error);
         });
     }, [dispatch]);
-
-    
+ 
     return (
         <div>
         <Header />
-
-        <ul>
-            {listeFilm ? listeFilm.map((item, index) => (
-                <li key={index}>
-                    <Link to={`/pagefilm/${item._id}`}>{item.titre}</Link>
-                </li>
-            
-            
-           )) : null}
-        </ul>
+        <h1>Votre catalogue de films !</h1>
+        <table style={{ borderWidth:"1px"}}>
+            <thead>
+                <tr>
+                    <th>Titre</th><th>Réalisateurs</th><th>Année de production</th><th>Nationalité</th><th>Durée</th><th>Genre</th><th>Synopsis</th>
+                </tr>
+            </thead>
+            <tbody>
+                {listeFilm ? listeFilm.map((item, index) => (
+                    <tr key={index}>
+                        <td>
+                            <Link to={`/pagefilm/${item._id}`}>{item.titre}</Link>
+                        </td>
+                        <td>
+                            {item.realisateurs}
+                        </td>
+                        <td>
+                            {item.annee}
+                        </td>
+                        <td>
+                            {item.nationalite}
+                        </td>
+                        <td>
+                            {item.duree}
+                        </td>
+                        <td>
+                            {item.genre}
+                        </td>
+                        <td>
+                            {item.synopsis}
+                        </td>
+                    </tr>
+                
+                )) : null}
+            </tbody>
+        </table>
         </div>
     );
     };

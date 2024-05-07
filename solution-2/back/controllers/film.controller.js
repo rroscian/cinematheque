@@ -16,7 +16,7 @@ const recupFilms = async(req, res) => {
 
 /**
  * Cette fonction récupère un nombre de films de la Base de Données pour usage
- * @param nombre - nombre de films à récupérer
+ * Crée pour ajouter un lazy load au besoin à l'avenir
  * @return {JSON} - JSON contenant les données du nombre de films
  */
 const recupNbFilms = async(req, res) => {
@@ -44,9 +44,14 @@ const recupFilmParId = async (req, res) => {
   }
 }
 
+/**
+ * Cette fonction filtre les films de la Base de Données selon le texte entrée
+ * @return {JSON} - JSON contenant les films correspondants
+ */
 const rechercheFilm = async (req, res) => {
   try {
-    const films = await filmModel.find({ titre: { $regex: req.params.titre, $options: "i" } });
+    console.log(req)
+    const films = await filmModel.find({ titre: { $regex: req.params.recherche, $options: "i" } });
     res.status(200).json(films);
   } catch (err) {
     // console.log('Erreur lors de la recherche des films:' + err)

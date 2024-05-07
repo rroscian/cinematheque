@@ -9,14 +9,18 @@ const Onefilm = () => {
     const listeFilms = JSON.parse(localStorage.getItem('listefilms'));
     const film = listeFilms.find((item) => item._id === _id);
 
+    /**
+     * Cette fonction met à jour une liste de films qu'un utilisateur aime, a vu ou voudrait voir dans la BDD
+     * @param {type} - Le type de la liste à mettre à jour
+     */
     const listManage = ( type ) => {
         const user = JSON.parse(localStorage.getItem('user'));
         const data = {
             _id: user._id,
             type: type,
-            movieId: film._id
+            filmId: film._id
         };
-        axios.post('http://localhost:3000/api/users/infoUser', data)
+        axios.post('http://localhost:3000/api/users/recupDonnees', data)
             .then((response) => {
                 console.log(response.data);
             })
@@ -25,38 +29,54 @@ const Onefilm = () => {
             });
     }
 
-    // const imageManage = (infoFilm && infoFilm.poster_path) ? `https://image.tmdb.org/t/p/w500${infoFilm.poster_path}` : filmUnkown;
+    /**
+     * Cette fonction récupère une liste de films et mélange celle-ci pour l'affichage des films
+     * @return {JSON} - Liste mélangée
+     */
+    const melangeListe = (liste) => {
+        for (let i = liste.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [liste[i], liste[j]] = [liste[j], liste[i]];
+        }
+        return liste
+    }
     
-    //Films similaires
-    const filmsSimilaire = listeFilms.filter((item) => item.genre === film.genre && item._id !== film._id).slice(0, 5);
+    // Films similaires: gestion des films recommandés en fonction de leur genre
+    const listeFilmsSimilaire = listeFilms.filter((item) => item.genre === film.genre && item._id !== film._id);
+    const filmsSimilaire = melangeListe(listeFilmsSimilaire).slice(0,5);
 
     return (
         <main>
             <Header />
-            <p>Titre : {film.titre}</p>
-            {film.titreOriginal ? <p>Titre Original: {titreOriginal} </p> : null}
+            <h1>{film.titre}</h1>
+            {film.titreOriginal ? <p>Titre original : {titreOriginal} </p> : null}
             <p>Année de production : {film.annee}</p>
             <p>Synopsis : {film.synopsis}</p>
             <p>Durée: {film.duree} </p>
-            <p>realisateur : {film.realisateurs}</p>
+            <p>Réalisateur : {film.realisateurs}</p>
             
             {film.genre ? <p>genre: {film.genre} </p> : null}
             <div>
-                <h2>Films similaires : </h2>
+                <h2>Films similaires dans la catégorie "Film {film.genre}": </h2>
                 {filmsSimilaire ? filmsSimilaire.map((item, index) => (
-                    <li key={index}>
+                    <p key={index}>
                         <Link to={`/pagefilm/${item._id}`}>{item.titre}</Link>
-                    </li>
+                    </p>
                 )) : null}
             </div>
-            <button onClick={() => {listManage("like")}} >
+            <button onClick={() => {listManage("filmsAimes")}} >
                  J'aime
             </button>
-            <button onClick={() => {listManage("watched")}} >
+            <button onClick={() => {listManage("filmsVus")}} >
                 J'ai vu
-            </button>
-            <button onClick={() => {listManage("watchlist")}} >
+            </button> 
+            <button onClick={() => {listManage("filmsAVoir")}} >
                 Je veux voir
+            </button>
+            <br />
+            <br />
+            <button onClick={() => {window.location.href = "/"}} >
+                Retourner au menu
             </button>
 
         </main>

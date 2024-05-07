@@ -1,12 +1,12 @@
 const express = require('express');
-const { inscription, connexion, recupUser, infosUser, recupDonneesUser } = require('../controllers/user.controller.js');
+const { inscription, connexion, recupUser, infosUser, recupDonneesUser, recupUsers, recupOneUser } = require('../controllers/user.controller.js');
 
 const router = express.Router();
 
-router.get("/recupUser", recupUser);
+router.get("/recupUser", recupUsers);
 router.post("/inscription", inscription);
 router.post("/connexion", connexion);
-router.get("/infoUser", infosUser);
+router.post("/infosUser", recupOneUser);
 router.post("/recupDonnees", recupDonneesUser);
 
 module.exports = router;

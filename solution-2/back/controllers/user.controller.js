@@ -3,17 +3,20 @@ const bcrypt = require ('bcrypt');
 const jwt = require('jsonwebtoken');
 const { env } = require('../config/data.js');
 
+/**
+ * Cette fonction tente d'inscrire un utilisateur s'il fournit un mail valide et unique.
+ * La fonction encrypte le mot de passe puis crée l'utilisateur dans la BDD.
+ * Affiche l'inscription réussie et le connecte ensuite.
+ */
 const inscription = async (req, res) => {
   try {
-    const { pseudo, mail, motdepasse, avatar } = req.body
     // on récupère toutes les infos dans la requête pour propulser les données utilisateur dans la BDD
+    const { pseudo, mail, motdepasse, avatar } = req.body
     const userExiste = await userModel.findOne({ mail: mail });
     if (userExiste) {
       return res.status(409).send('Cet email est déjà utilisé');
     }
     const passwordHashed = await bcrypt.hash(motdepasse, 10);
-
-    console.log(req)
     const newUser = await userModel.create({
         pseudo: pseudo, 
         mail: mail,
@@ -24,12 +27,18 @@ const inscription = async (req, res) => {
         filmsAVoir: []
     });
 
+    console.log('test')
     res.status(201).json({message : "Nouvel utilisateur créé !", user: newUser})
   } catch (err) {
     res.status(500).send('Erreur lors de la création de l\'utilisateur.');
   }
 }
 
+
+/**
+ * Cette fonction tente de connecter un utilisateur en vérifiant si son mail et mot de passe sont ceux d'un utilisateur valide dans la BDD.
+ * Affiche la connexion réussie.
+ */
 const connexion = async (req, res) => {
   try{
     const data = req.body;
@@ -70,7 +79,11 @@ const connexion = async (req, res) => {
   }
 }
 
-const recupUser = async (req, res) => {
+/**
+ * Cette fonction récupère les informations d'un utilisateur.
+ * @return {JSON} - JSON des informations utilisateur
+ */
+const recupUsers = async (req, res) => {
   try {
     const users = await userModel.find();
     console.log(JSON.stringify(users))
@@ -80,16 +93,18 @@ const recupUser = async (req, res) => {
   }
 }
 
-const infosUser = async (req, res) => {
+/**
+ * Cette fonction récupère les informations d'un utilisateur en fonction de mon mail et masque le mot de passe.
+ * @return {JSON} - JSON des informations utilisateur pour affichage
+ */
+const recupOneUser = async (req, res) => {
   try {
-    console.log("test")
     const user = await userModel.findOne({ mail: req.body.mail });
     user.motdepasse = undefined; // ne pas garder le mot de passe pour des raisons de sécurité
     res.json(user);
   } catch (error) {
     res.status(500).send('Erreur lors de la récupération des données utilisateur.');
   }
-
 }
 
 const recupDonneesUser = async (req, res) => {
@@ -121,4 +136,4 @@ const recupDonneesUser = async (req, res) => {
   }
 }
 
-module.exports = { inscription, connexion, recupUser, infosUser, recupDonneesUser };
+module.exports = { inscription, connexion, recupUsers, recupOneUser, recupDonneesUser };
